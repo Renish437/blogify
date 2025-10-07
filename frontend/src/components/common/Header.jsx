@@ -12,50 +12,50 @@ const Header = () => {
     return (
         <>
             <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-sm shadow-sm font-dm-sans">
-                <div className="container max-w-[1440px] mx-auto flex items-center justify-between px-4 py-4">
-                    <Link to="/" className="text-xl font-bold ">
+                <div className="container max-w-[1440px] mx-auto flex items-center justify-between px-4 py-5">
+                    <Link to="/" className="text-2xl font-bold ">
                         Blogify
                     </Link>
 
                     <nav className="hidden md:flex space-x-6">
                         <NavLink
                             to="/blogs"
-                            className="text-gray-900 hover:text-gray-600"
+                            className="text-gray-900 hover:text-gray-600  md:text-lg"
                         >
                             Fashion
                         </NavLink>
 
                         <NavLink
                             to="/blogs"
-                            className="text-gray-900 hover:text-gray-600"
+                            className="text-gray-900 hover:text-gray-600 md:text-lg"
                         >
                             Travel
                         </NavLink>
 
                         <NavLink
                             to="/blogs"
-                            className="text-gray-900 hover:text-gray-600"
+                            className="text-gray-900 hover:text-gray-600 md:text-lg"
                         >
                             Education
                         </NavLink>
 
                         <NavLink
                             to="/blogs"
-                            className="text-gray-900 hover:text-gray-600"
+                            className="text-gray-900 hover:text-gray-600 md:text-lg"
                         >
                             Technology
                         </NavLink>
 
                         <NavLink
                             to="/blogs"
-                            className="text-gray-900 hover:text-gray-600"
+                            className="text-gray-900 hover:text-gray-600 md:text-lg"
                         >
                             Business
                         </NavLink>
 
                         <NavLink
                             to="/blogs"
-                            className="text-gray-900 hover:text-gray-600"
+                            className="text-gray-900 hover:text-gray-600 md:text-lg"
                         >
                             Entertainment
                         </NavLink>
@@ -64,13 +64,13 @@ const Header = () => {
                     <div className="hidden md:flex space-x-4">
                         <Link
                             to="/login"
-                            className="px-4 py-2 border border-primary-color text-primary-color rounded-md hover:bg-primary-color hover:text-white transition"
+                            className="px-4 py-2 border md:text-lg border-primary-color text-primary-color rounded-md hover:bg-primary-color hover:text-white transition"
                         >
                             Login
                         </Link>
                         <Link
                             to="/register"
-                            className="px-4 py-2 bg-primary-color hover:bg-secondary-color text-white rounded-md transition"
+                            className="px-4 py-2 md:text-lg bg-primary-color hover:bg-secondary-color text-white rounded-md transition"
                         >
                             Register
                         </Link>

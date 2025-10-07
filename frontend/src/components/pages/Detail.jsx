@@ -11,6 +11,11 @@ const Detail = () => {
     const [comments, setComments] = useState([]);
     const [isFavorite, setIsFavorite] = useState(false);
 
+      const [commentText, setCommentText] = useState(''); 
+
+   
+
+
     useEffect(() => {
         const blogData = {
             id: 1,
@@ -133,7 +138,8 @@ const Detail = () => {
                         {/* Comment Form */}
                         <form  className="mb-12">
                             <textarea
-                                value=""
+                                 value={commentText}
+            onChange={(e) => setCommentText(e.target.value)}
                                 placeholder="Add a comment..."
                                 className="w-full p-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-color focus:border-primary-color resize-none h-32"
                             />

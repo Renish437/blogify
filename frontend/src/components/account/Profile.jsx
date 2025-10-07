@@ -25,7 +25,7 @@ const Profile = () => {
                                     <h3 className="text-lg font-medium text-gray-900 mb-4">
                                         Profile Information
                                     </h3>
-                                    <div className="flex flex-col md:flex-row gap-6">
+                                    <div className="flex flex-col md:flex-row gap-10">
                                         <div className="md:w-1/3">
                                             <div className="aspect-square w-full max-w-[200px] mx-auto relative">
                                                 <img
@@ -38,12 +38,12 @@ const Profile = () => {
                                                 </button>
                                             </div>
                                         </div>
-                                        <div className="md:w-2/3 space-y-4">
-                                            <form>
+                                        <div className="md:w-2/3 space-y-8">
+                                            <form className="gap-y-10">
                                                 <div>
                                                     <label
                                                         htmlFor="fullName"
-                                                        className="block text-sm font-medium text-gray-700 mb-1"
+                                                        className="block text-sm font-medium text-gray-700 my-3"
                                                     >
                                                         Full Name
                                                     </label>
@@ -51,7 +51,7 @@ const Profile = () => {
                                                         id="fullName"
                                                         name="fullName"
                                                         type="text"
-                                                        className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md text-sm shadow-sm placeholder-gray-400
+                                                        className="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-md text-sm shadow-sm placeholder-gray-400
                                                     focus:outline-none focus:border-primary-color focus:ring-1 focus:ring-primary-color"
                                                         placeholder="Enter your full name"
                                                     />
@@ -59,7 +59,7 @@ const Profile = () => {
                                                 <div>
                                                     <label
                                                         htmlFor="email"
-                                                        className="block text-sm font-medium text-gray-700 mb-1"
+                                                        className="block text-sm font-medium text-gray-700 my-3"
                                                     >
                                                         Email Address
                                                     </label>
@@ -67,7 +67,7 @@ const Profile = () => {
                                                         id="email"
                                                         name="email"
                                                         type="email"
-                                                        className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md text-sm shadow-sm placeholder-gray-400
+                                                        className="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-md text-sm shadow-sm placeholder-gray-400
                                                     focus:outline-none focus:border-primary-color focus:ring-1 focus:ring-primary-color
                                                     disabled:bg-gray-50 disabled:text-gray-500"
                                                         placeholder="you@example.com"
@@ -78,7 +78,7 @@ const Profile = () => {
                                                 <div>
                                                     <label
                                                         htmlFor="bio"
-                                                        className="block text-sm font-medium text-gray-700 mb-1"
+                                                        className="block text-sm font-medium text-gray-700 my-3"
                                                     >
                                                         Bio
                                                     </label>
@@ -86,7 +86,7 @@ const Profile = () => {
                                                         id="bio"
                                                         name="bio"
                                                         rows={3}
-                                                        className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md text-sm shadow-sm placeholder-gray-400
+                                                        className="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-md text-sm shadow-sm placeholder-gray-400
                                                     focus:outline-none focus:border-primary-color focus:ring-1 focus:ring-primary-color"
                                                         placeholder="Write a few sentences about yourself"
                                                     />
@@ -98,7 +98,7 @@ const Profile = () => {
                                                 <div>
                                                     <label
                                                         htmlFor="location"
-                                                        className="block text-sm font-medium text-gray-700 mb-1"
+                                                        className="block text-sm font-medium text-gray-700 my-3"
                                                     >
                                                         Location
                                                     </label>
@@ -107,13 +107,13 @@ const Profile = () => {
                                                         id="location"
                                                         name="location"
                                                         type="text"
-                                                        className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md text-sm shadow-sm placeholder-gray-400
+                                                        className="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-md text-sm shadow-sm placeholder-gray-400
                                                     focus:outline-none focus:border-primary-color focus:ring-1 focus:ring-primary-color"
                                                         placeholder="City, Country"
                                                     />
                                                 </div>
                                                 <div className="pt-4">
-                                                    <button className="bg-primary-color text-white px-4 py-2 rounded-md hover:bg-secondary-color focus:outline-none focus:ring-2 focus:ring-primary-color focus:ring-offset-2">
+                                                    <button className="bg-primary-color text-white px-4 py-3 rounded-md hover:bg-secondary-color focus:outline-none focus:ring-2 focus:ring-primary-color focus:ring-offset-2">
                                                         Save Changes
                                                     </button>
                                                 </div>
