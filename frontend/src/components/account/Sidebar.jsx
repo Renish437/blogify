@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
     UserCircleIcon,
     DocumentTextIcon,
@@ -6,6 +6,8 @@ import {
     KeyIcon,
 } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../context/Auth";
+import toast from "react-hot-toast";
 
 const Sidebar = () => {
     const tabs = [
@@ -34,6 +36,8 @@ const Sidebar = () => {
             icon: KeyIcon,
         },
     ];
+
+    const {logout}= useContext(AuthContext);
 
     return (
         <aside className="md:w-64 flex-shrink-0">
@@ -66,7 +70,8 @@ const Sidebar = () => {
                 <div className="pt-4 mt-6 border-t border-gray-200">
                     <button
                         onClick={() => {
-                            console.log("Logout clicked");
+                           logout();
+                           toast.success("Logout successfully!");
                         }}
                         className="w-full flex items-center space-x-3 px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                     >

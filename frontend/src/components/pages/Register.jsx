@@ -153,7 +153,7 @@ const Register = () => {
          <button
             type="submit"
             disabled={loading} // disable button while loading
-            className="w-full py-3 px-4 bg-primary-color text-white font-semibold rounded-lg shadow-md transition hover:bg-secondary-color active:bg-primary-color flex items-center justify-center"
+            className="w-full py-3 px-4 cursor-pointer bg-primary-color text-white font-semibold rounded-lg shadow-md transition  active:bg-primary-color flex items-center justify-center"
           >
             {loading ? (
            < Loader/>

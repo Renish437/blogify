@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { token } from "./Config";
+import { AuthContext } from "../context/Auth";
 
 const Header = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const {isLoggedIn}= useContext(AuthContext);
 
     const toggleMobileMenu = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -60,8 +62,9 @@ const Header = () => {
                             Entertainment
                         </NavLink>
                     </nav>
-
-                    <div className="hidden md:flex space-x-4">
+                    {
+                        !isLoggedIn && (
+                            <div className="hidden md:flex space-x-4">
                         <Link
                             to="/login"
                             className="px-4 py-2 border md:text-lg border-primary-color text-primary-color rounded-md hover:bg-primary-color hover:text-white transition"
@@ -70,11 +73,25 @@ const Header = () => {
                         </Link>
                         <Link
                             to="/register"
-                            className="px-4 py-2 md:text-lg bg-primary-color hover:bg-secondary-color text-white rounded-md transition"
+                            className="px-4 py-2 md:text-lg bg-primary-color  text-white rounded-md transition"
                         >
                             Register
                         </Link>
                     </div>
+                        )
+
+
+                    }
+                    {
+                        isLoggedIn && <Link
+                            to="/profile"
+                            className="px-4 py-2 md:text-lg bg-primary-color  text-white rounded-md transition"
+                        >
+                           Dashboard
+                        </Link>
+
+                    }
+                    
 
                     <button
                         onClick={toggleMobileMenu}

@@ -10,6 +10,8 @@ import MyBlogs from "./components/account/MyBlogs";
 import ChangePasword from "./components/account/ChangePasword";
 import FavBlog from "./components/account/FavBlog";
 import { Toaster } from "react-hot-toast";
+import RequireAuth from "./components/common/RequireAuth";
+import GuestRoute from "./components/common/GuestRoute";
 // import { Toaster } from 'react-hot-toast';
 
 const App = () => {
@@ -17,11 +19,25 @@ const App = () => {
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/profile" element={<Profile />} />
+                <Route path="/login" element={
+                    <GuestRoute>
+                        <Login />
+                    </GuestRoute>
+                } />
+                <Route path="/register" element={
+                    <GuestRoute>
+                        <Register />
+                    </GuestRoute>
+                } />
+               
                 <Route path="/blogs" element={<Blog />} />
                 <Route path="/detail" element={<Detail />} />
+
+                 <Route path="/profile" element={
+                    <RequireAuth>
+                        <Profile />
+                    </RequireAuth>
+                 } />
                 <Route path="/my-blogs" element={<MyBlogs />} />
                 <Route path="/change-password" element={<ChangePasword />} />
                 <Route path="/saved-blogs" element={<FavBlog />} />
