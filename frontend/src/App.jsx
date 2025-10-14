@@ -9,6 +9,8 @@ import Profile from "./components/account/Profile";
 import MyBlogs from "./components/account/MyBlogs";
 import ChangePasword from "./components/account/ChangePasword";
 import FavBlog from "./components/account/FavBlog";
+import { Toaster } from "react-hot-toast";
+// import { Toaster } from 'react-hot-toast';
 
 const App = () => {
     return (
@@ -24,6 +26,7 @@ const App = () => {
                 <Route path="/change-password" element={<ChangePasword />} />
                 <Route path="/saved-blogs" element={<FavBlog />} />
             </Routes>
+            <Toaster />
         </BrowserRouter>
     );
 };
