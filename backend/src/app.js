@@ -10,5 +10,8 @@ app.use(express.static("public"))
 
 // Import Routes
 import userRouter from './routes/user.routes.js';
+// Import Routes
+import blogRouter from './routes/blog.routes.js';
 app.use('/api/users',userRouter)
+app.use('/api/blogs',blogRouter)
 export {app}
