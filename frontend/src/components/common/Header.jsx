@@ -5,7 +5,8 @@ import { AuthContext } from "../context/Auth";
 
 const Header = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const {isLoggedIn}= useContext(AuthContext);
+   const { isLoggedIn } = useContext(AuthContext);
+    const isLoginIn = isLoggedIn();
 
     const toggleMobileMenu = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -63,7 +64,7 @@ const Header = () => {
                         </NavLink>
                     </nav>
                     {
-                        !isLoggedIn && (
+                        !isLoginIn && (
                             <div className="hidden md:flex space-x-4">
                         <Link
                             to="/login"
@@ -83,12 +84,12 @@ const Header = () => {
 
                     }
                     {
-                        isLoggedIn && <Link
+                       isLoginIn && (<Link
                             to="/profile"
                             className="px-4 py-2 md:text-lg bg-primary-color  text-white rounded-md transition"
                         >
                            Dashboard
-                        </Link>
+                        </Link>)
 
                     }
                     

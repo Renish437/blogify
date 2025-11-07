@@ -8,8 +8,10 @@ import Loader from "../common/Loader";
 import toast from "react-hot-toast";
 import { AuthContext } from "../context/Auth";
 
+
 const Login = () => {
-    const {login} =useContext(AuthContext);
+  const { login } = useContext(AuthContext);
+  
   const [loading, setLoading] = useState(false);
  
   const navigate = useNavigate();

@@ -12,6 +12,8 @@ import FavBlog from "./components/account/FavBlog";
 import { Toaster } from "react-hot-toast";
 import RequireAuth from "./components/common/RequireAuth";
 import GuestRoute from "./components/common/GuestRoute";
+import CreateBlog from "./components/blog/CreateBlog";
+import UpdateBlog from "./components/blog/UpdateBlog";
 // import { Toaster } from 'react-hot-toast';
 
 const App = () => {
@@ -38,9 +40,31 @@ const App = () => {
                         <Profile />
                     </RequireAuth>
                  } />
-                <Route path="/my-blogs" element={<MyBlogs />} />
-                <Route path="/change-password" element={<ChangePasword />} />
-                <Route path="/saved-blogs" element={<FavBlog />} />
+                   <Route path="/blogs/create" element={
+                    <RequireAuth>
+                        <CreateBlog />
+                    </RequireAuth>
+                 } />
+                 <Route path="/blogs/:id/edit" element={
+                    <RequireAuth>
+                        <UpdateBlog />
+                    </RequireAuth>
+                 } />
+                <Route path="/my-blogs" element={
+                    <RequireAuth>
+                        <MyBlogs />
+                    </RequireAuth>
+                 } />
+                <Route path="/change-password" element={
+                    <RequireAuth>
+                        <ChangePasword />
+                    </RequireAuth>
+                 } />
+                <Route path="/saved-blogs" element={
+                    <RequireAuth>
+                        <FavBlog />
+                    </RequireAuth>
+                 }/>
             </Routes>
             <Toaster />
         </BrowserRouter>

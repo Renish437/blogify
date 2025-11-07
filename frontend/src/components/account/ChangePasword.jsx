@@ -16,7 +16,7 @@ const ChangePasword = () => {
                         <div className="space-y-6">                             
                             <div className="bg-white shadow rounded-lg p-6">
                                 <h3 className="text-lg font-medium text-gray-900 mb-4">Change Password</h3>
-                                <div className="space-y-4 max-w-md">
+                                <div className="space-y-4 max-w-full">
                                     <div>
                                         <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700 my-3">
                                             Current Password
