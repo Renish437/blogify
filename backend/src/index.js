@@ -10,7 +10,7 @@ app.get('/test',(req,res)=>{
 
 connectDB().then(()=>{
 app.listen(PORT,()=>{
-    console.log(`Server started at port http://192.168.18.10:${PORT}`)
+    console.log(`Server started at port http://127.0.0.1:${PORT}`)
 })
 }).catch(()=>{
     console.log("MongoDB connection failed ");

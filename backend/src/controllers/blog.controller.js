@@ -6,7 +6,7 @@ const createBlog = async (req, res) => {
     const { title, content, read_time, status, category } = req.body;
     if (!title?.trim() || !category?.trim()) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: "Title and Category are required fields",
         data: {},
       });
@@ -27,7 +27,7 @@ const createBlog = async (req, res) => {
     }
     const blog = await Blog.create(blogObj);
     return res.status(200).json({
-      status: true,
+      success: true,
       message: "Blog added successfully.",
       data: {
         blog: blog,
@@ -35,7 +35,7 @@ const createBlog = async (req, res) => {
     });
   } catch (error) {
     return res.status(400).json({
-      status: false,
+      success: false,
       message: error.message,
       data: {},
     });
@@ -49,7 +49,7 @@ const updateBlog = async (req, res) => {
 
     if (!blog) {
       return res.status(404).json({
-        status: false,
+        success: false,
         message: "Blog not found.",
         data: {},
       });
@@ -59,7 +59,7 @@ const updateBlog = async (req, res) => {
 
     if (!title?.trim() || !category?.trim()) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: "Title and Category are required fields",
         data: {},
       });
@@ -86,13 +86,13 @@ const updateBlog = async (req, res) => {
     });
 
     return res.status(200).json({
-      status: true,
+      success: true,
       message: "Blog updated successfully.",
       data: { blog: updatedBlog },
     });
   } catch (error) {
     return res.status(400).json({
-      status: false,
+      success: false,
       message: error.message,
       data: {},
     });
@@ -111,7 +111,7 @@ const getBlogs =async (req,res)=>{
         }
         const blogs = await  Blog.find(filter)
         res.status(200).json({
-            status:true,
+            success:true,
             message:"",
             data:{
                 blogs:blogs
@@ -136,9 +136,9 @@ const getUserBlogs = async (req,res)=>{
         // if(category && category != "all"){
         //     filter.category= category
         // }
-        const blogs = await  Blog.find({user:userId})
+        const blogs = await  Blog.find({user:userId}).sort({ createdAt: -1 });
         res.status(200).json({
-            status:true,
+            success:true,
             message:"",
             data:{
                 blogs:blogs
@@ -146,46 +146,65 @@ const getUserBlogs = async (req,res)=>{
         })
     } catch (error) {
          res.status(500).json({
-            status:false,
+            success:false,
             message:error.message,
             data:{}
         })
     }
 }
+const getSingleBlog = async (req, res) => {
+  try {
+    const blog = await Blog.findById(req.params.id);
+    res.status(200).json({
+      success: true,
+      data: { blog },
+      message: "",
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message, data: {} });
+  }
+};
 
-const deleteBlog = async (req, res) => {
+ const deleteBlog = async (req, res) => {
   try {
     const blogId = req.params.id;
-    const userId = req?.user?._id;
+    const userId = req.user?._id;
 
-    // Find blog owned by the logged-in user
-    const blog = await Blog.findOne({
-      _id: blogId,
-      user: userId,
-    });
-
-    if (!blog) {
-      return res.status(404).json({
-        status: false,
-        message: "Blog not found or unauthorized to delete.",
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized. Please log in.",
         data: {},
       });
     }
 
-    await Blog.deleteOne({ _id: blogId });
+    // Find the blog owned by the logged-in user
+    const blog = await Blog.findOne({ _id: blogId, user: userId });
+
+    if (!blog) {
+      return res.status(404).json({
+        success: false,
+        message: "Blog not found or you are not authorized to delete it.",
+        data: {},
+      });
+    }
+
+    // Delete the blog
+    await blog.deleteOne();
 
     return res.status(200).json({
-      status: true,
+      success: true,
       message: "Blog deleted successfully.",
-      data: {},
+      data: { blogId },
     });
   } catch (error) {
+    console.error("Error deleting blog:", error);
     return res.status(500).json({
-      status: false,
-      message: error.message || "Something went wrong",
+      success: false,
+      message: error.message || "Internal server error",
       data: {},
     });
   }
 };
 
-export { createBlog, updateBlog,getBlogs,getUserBlogs ,deleteBlog};
+export { createBlog, updateBlog,getBlogs,getUserBlogs,getSingleBlog ,deleteBlog};
