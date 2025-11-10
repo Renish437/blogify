@@ -100,30 +100,37 @@ const updateBlog = async (req, res) => {
 };
 const getBlogs = async (req, res) => {
   try {
-    const { category ,limit} = req.query;
+    const { category, limit } = req.query;
 
     let filter = {
       status: "active",
     };
-    if (category && category != "all") {
-      filter.category = category;
+
+    if (category && category.toLowerCase() !== "all") {
+      filter.category = { $regex: new RegExp(`^${category}$`, "i") };
     }
-    const blogs = await Blog.find(filter).populate("user","-password").sort({createdAt:-1}).limit(limit);
+
+    const blogs = await Blog.find(filter)
+      .populate("user", "-password")
+      .sort({ createdAt: -1 })
+      .limit(limit ? parseInt(limit) : 0);
+
     res.status(200).json({
       success: true,
       message: "",
       data: {
-        blogs: blogs,
+        blogs,
       },
     });
   } catch (error) {
     res.status(500).json({
-      status: false,
+      success: false,
       message: error.message,
       data: {},
     });
   }
 };
+
 const getUserBlogs = async (req, res) => {
   try {
     const userId = req?.user?._id;
