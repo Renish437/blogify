@@ -18,7 +18,7 @@ const CreateBlog = ({ placeholder }) => {
     formState: { errors },
     reset,
   } = useForm();
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const editor = useRef(null);
   const [content, setContent] = useState("");
@@ -31,33 +31,32 @@ const CreateBlog = ({ placeholder }) => {
     }),
     [placeholder]
   );
-  const onSubmit = async (fomData)=>{
+  const onSubmit = async (fomData) => {
     setLoading(true);
     try {
       const formData = new FormData();
-    formData.append("title",fomData.title);
-    formData.append("read_time",fomData.read_time);
-    formData.append("category",fomData.category);
-    formData.append("content",content);
-    formData.append("status",fomData.status);
-    formData.append("image",fomData.image[0]);
-   
-    const response = await instance.post('/blogs/create', formData);
-     const { success, message } = response;
-    if(success){
-      toast.success(message);
-      navigate('/my-blogs');
-    }else{
-      toast.error(message)
-    }
+      formData.append("title", fomData.title);
+      formData.append("read_time", fomData.read_time);
+      formData.append("category", fomData.category);
+      formData.append("content", content);
+      formData.append("status", fomData.status);
+      formData.append("image", fomData.image[0]);
+
+      const response = await instance.post("/blogs/create", formData);
+      const { success, message } = response;
+      if (success) {
+        toast.success(message);
+        navigate("/my-blogs");
+      } else {
+        toast.error(message);
+      }
     } catch (error) {
       console.log(error.message);
-       toast.error(error.message)
-    }finally{
+      toast.error(error.message);
+    } finally {
       setLoading(false);
     }
-   
-  }
+  };
   return (
     <Layout>
       <div className="py-8">
@@ -74,7 +73,10 @@ const CreateBlog = ({ placeholder }) => {
                     Create Blog
                   </h3>
                   <div className="min-h-screen  flex justify-center py-10 px-6">
-                    <form onSubmit={handleSubmit(onSubmit)} className=" w-full max-w-5xl p-2">
+                    <form
+                      onSubmit={handleSubmit(onSubmit)}
+                      className=" w-full max-w-5xl p-2"
+                    >
                       <h2 className="text-2xl font-semibold text-gray-600 border-b pb-4 mb-8">
                         📝 Create New Blog
                       </h2>
@@ -123,6 +125,7 @@ const CreateBlog = ({ placeholder }) => {
                             <option value="">Select category</option>
                             <option value="Technology">Technology</option>
                             <option value="Development">Development</option>
+                            <option value="Design">Design</option>
                             <option value="Others">Others</option>
                           </select>
                           {errors.title && (
@@ -236,16 +239,13 @@ const CreateBlog = ({ placeholder }) => {
                           className="bg-primary-color text-white px-6 py-3 rounded-md font-medium shadow hover:bg-primary-color/90 transition-all"
                           disabled={loading}
                         >
-                       {
-  !loading ? (
-    "Create Blog"
-  ) : (
-    <>
-      <Loader /> Creating...
-    </>
-  )
-}
-
+                          {!loading ? (
+                            "Create Blog"
+                          ) : (
+                            <>
+                              <Loader /> Creating...
+                            </>
+                          )}
                         </button>
                       </div>
                     </form>

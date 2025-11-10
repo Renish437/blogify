@@ -72,7 +72,7 @@ const Home = () => {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         {/* Left side - Main featured article */}
                         {mainFeatured && (
-                            <article className="group cursor-pointer">
+                            <article key={mainFeatured._id} className="group cursor-pointer">
                                 <div className="relative aspect-[16/10] overflow-hidden rounded-2xl mb-6">
                                     <img 
                                         src={mainFeatured.image}
@@ -97,7 +97,7 @@ const Home = () => {
                         {/* Right side - 3 smaller articles */}
                         <div className="space-y-6">
                             {featuredBlogs.map(blog => (
-                                <article key={blog.id} className="group flex gap-6 cursor-pointer">
+                                <article key={blog._id} className="group flex gap-6 cursor-pointer">
                                     <div className="flex-shrink-0">
                                         <div className="relative w-24 h-24 overflow-hidden rounded-lg">
                                             <img 
@@ -132,7 +132,7 @@ const Home = () => {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {latestBlogs.map(blog => (
-                            <article key={blog.id} className="group cursor-pointer">
+                            <article key={blog._id} className="group cursor-pointer">
                                 <div className="relative aspect-[16/10] overflow-hidden rounded-xl mb-4">
                                     <img 
                                         src={blog.image}

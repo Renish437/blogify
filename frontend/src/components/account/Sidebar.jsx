@@ -37,7 +37,7 @@ const Sidebar = () => {
         },
     ];
 
-    const {logout}= useContext(AuthContext);
+    const {logout,user}= useContext(AuthContext);
 
     return (
         <aside className="md:w-64 flex-shrink-0">
@@ -50,7 +50,7 @@ const Sidebar = () => {
                     />
                     <div>
                         <h2 className="text-lg font-medium text-gray-900">
-                            Eva
+                            {user?.name}
                         </h2>
                         <p className="text-sm text-gray-500">View Profile</p>
                     </div>
