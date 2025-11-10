@@ -98,60 +98,58 @@ const updateBlog = async (req, res) => {
     });
   }
 };
-const getBlogs =async (req,res)=>{
-    try {
-        const {category} =req.query
+const getBlogs = async (req, res) => {
+  try {
+    const { category ,limit} = req.query;
 
-      
-        let filter={
-            status:"active"
-        };
-        if(category && category != "all"){
-            filter.category= category
-        }
-        const blogs = await  Blog.find(filter)
-        res.status(200).json({
-            success:true,
-            message:"",
-            data:{
-                blogs:blogs
-            }
-        })
-    } catch (error) {
-         res.status(500).json({
-            status:false,
-            message:error.message,
-            data:{}
-        })
+    let filter = {
+      status: "active",
+    };
+    if (category && category != "all") {
+      filter.category = category;
     }
-}
-const getUserBlogs = async (req,res)=>{
-     try {
-        const userId = req?.user?._id
+    const blogs = await Blog.find(filter).populate("user","-password").sort({createdAt:-1}).limit(limit);
+    res.status(200).json({
+      success: true,
+      message: "",
+      data: {
+        blogs: blogs,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: false,
+      message: error.message,
+      data: {},
+    });
+  }
+};
+const getUserBlogs = async (req, res) => {
+  try {
+    const userId = req?.user?._id;
 
-      
-        // let filter={
-        //     status:"active"
-        // };
-        // if(category && category != "all"){
-        //     filter.category= category
-        // }
-        const blogs = await  Blog.find({user:userId}).sort({ createdAt: -1 });
-        res.status(200).json({
-            success:true,
-            message:"",
-            data:{
-                blogs:blogs
-            }
-        })
-    } catch (error) {
-         res.status(500).json({
-            success:false,
-            message:error.message,
-            data:{}
-        })
-    }
-}
+    // let filter={
+    //     status:"active"
+    // };
+    // if(category && category != "all"){
+    //     filter.category= category
+    // }
+    const blogs = await Blog.find({ user: userId }).sort({ createdAt: -1 });
+    res.status(200).json({
+      success: true,
+      message: "",
+      data: {
+        blogs: blogs,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      data: {},
+    });
+  }
+};
 const getSingleBlog = async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id);
@@ -165,7 +163,7 @@ const getSingleBlog = async (req, res) => {
   }
 };
 
- const deleteBlog = async (req, res) => {
+const deleteBlog = async (req, res) => {
   try {
     const blogId = req.params.id;
     const userId = req.user?._id;
@@ -206,5 +204,42 @@ const getSingleBlog = async (req, res) => {
     });
   }
 };
+const getFeaturedBlogs = async (req, res) => {
+  try {
+      const {  limit} = req.query;
+    let filter = {
+      status: "active",
+      is_featured: "yes",
+    };
 
-export { createBlog, updateBlog,getBlogs,getUserBlogs,getSingleBlog ,deleteBlog};
+    const blogs = await Blog.find(filter)
+      .populate("user", "-password") // populate user info except password
+      .sort({ createdAt: -1 }).limit(limit); // newest first
+
+    res.status(200).json({
+      success: true,
+      message: "",
+      data: {
+        blogs,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: false,
+      message: error.message,
+      data: {},
+    });
+  }
+};
+
+
+
+export {
+  createBlog,
+  updateBlog,
+  getBlogs,
+  getUserBlogs,
+  getSingleBlog,
+  getFeaturedBlogs,
+  deleteBlog,
+};
