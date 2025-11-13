@@ -159,7 +159,7 @@ const getUserBlogs = async (req, res) => {
 };
 const getSingleBlog = async (req, res) => {
   try {
-    const blog = await Blog.findById(req.params.id);
+    const blog = await Blog.findById(req.params.id).populate('user','-password');
     res.status(200).json({
       success: true,
       data: { blog },

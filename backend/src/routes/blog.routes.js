@@ -12,6 +12,7 @@ router.route('/get-blogs').get(getBlogs)
 router.route('/get-user-blogs').get(verifyJWT,getUserBlogs)
 router.route('/:id/delete').delete(verifyJWT,deleteBlog)
 router.route('/:id/get-blog').get(verifyJWT,getSingleBlog)
+router.route('/:id/get-blog-front').get(getSingleBlog)
 router.route('/get-featured-blogs').get(getFeaturedBlogs)
 
 export default router
