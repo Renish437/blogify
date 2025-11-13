@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Layout from '../common/Layout'
 import instance from '../common/axiosConfig';
 import moment from "moment";
+import { Link } from 'react-router-dom';
 
 const Home = () => {
     const [featuredBlogs, setFeaturedBlogs] = useState([]);
@@ -73,6 +74,7 @@ const Home = () => {
                         {/* Left side - Main featured article */}
                         {mainFeatured && (
                             <article key={mainFeatured._id} className="group cursor-pointer">
+                                <Link to={`/detail/${mainFeatured._id}`}>
                                 <div className="relative aspect-[16/10] overflow-hidden rounded-2xl mb-6">
                                     <img 
                                         src={mainFeatured.image}
@@ -91,6 +93,7 @@ const Home = () => {
                                 {/* <p className="text-gray-600 mb-4 line-clamp-3">
                                     {mainFeatured.excerpt}
                                 </p> */}
+                                </Link>
                             </article>
                         )}
 
@@ -98,6 +101,7 @@ const Home = () => {
                         <div className="space-y-6">
                             {featuredBlogs.map(blog => (
                                 <article key={blog._id} className="group flex gap-6 cursor-pointer">
+                                     <Link to={`/detail/${blog._id}`}>
                                     <div className="flex-shrink-0">
                                         <div className="relative w-24 h-24 overflow-hidden rounded-lg">
                                             <img 
@@ -118,6 +122,7 @@ const Home = () => {
                                         </h3>
                                         
                                     </div>
+                                    </Link>
                                 </article>
                             ))}
                         </div>
@@ -133,6 +138,7 @@ const Home = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {latestBlogs.map(blog => (
                             <article key={blog._id} className="group cursor-pointer">
+                                   <Link to={`/detail/${blog._id}`}>
                                 <div className="relative aspect-[16/10] overflow-hidden rounded-xl mb-4">
                                     <img 
                                         src={blog.image}
@@ -151,6 +157,7 @@ const Home = () => {
                                 {/* <p className="text-gray-600 mb-4 line-clamp-2">
                                     {blog.excerpt}
                                 </p> */}
+                                </Link>
                             </article>
                         ))}
                     </div>

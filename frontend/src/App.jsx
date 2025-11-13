@@ -33,7 +33,7 @@ const App = () => {
                 } />
                
                 <Route path="/blogs" element={<Blog />} />
-                <Route path="/detail" element={<Detail />} />
+                <Route path="/detail/:id" element={<Detail />} />
 
                  <Route path="/profile" element={
                     <RequireAuth>

@@ -143,6 +143,7 @@ const Blog = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   {latestBlogs.map((blog) => (
                     <article key={blog._id} className="group cursor-pointer">
+                      <Link to={`/detail/${blog._id}`}>
                       <div className="relative aspect-[16/10] overflow-hidden rounded-xl mb-4">
                         <img
                           src={blog.image || `https://placehold.co/600x400?text=${blog.title}`} // fallback image
@@ -161,6 +162,7 @@ const Blog = () => {
                       <h3 className="text-lg font-semibold text-gray-900 mb-3 group-hover:text-gray-600 line-clamp-2">
                         {blog.title}
                       </h3>
+                    </Link>
                     </article>
                   ))}
                 </div>
