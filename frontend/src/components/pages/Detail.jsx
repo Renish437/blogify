@@ -5,6 +5,8 @@ import { HeartIcon, ShareIcon, ArrowLeftIcon } from '@heroicons/react/24/outline
 import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid'
 import instance from '../common/axiosConfig'
 import moment from 'moment'
+import { useForm } from 'react-hook-form'
+import toast from "react-hot-toast";
 
 const Detail = () => {
     const { id } = useParams();
@@ -13,13 +15,22 @@ const Detail = () => {
     const [comments, setComments] = useState([]);
     const [isFavorite, setIsFavorite] = useState(false);
 
+
       const [commentText, setCommentText] = useState(''); 
       const params= useParams();
+
+      const {
+        register,
+        handleSubmit,
+        formState:{errors},
+        reset
+      } = useForm();
 
       const getBlog = async ()=>{
         try {
             const {data,message,success} = await instance.get(`/blogs/${params.id}/get-blog-front`);
             if(success){
+              
                 setBlog(data?.blog);
             }
         } catch (error) {
@@ -28,32 +39,43 @@ const Detail = () => {
         }
       }
 
+      const addComment = async (formData)=>{
+
+        try {
+            formData.id = params.id
+            const {data,message,success}= await instance.post(`/blogs/add-comment`,formData)
+
+            if(success){
+                reset()
+                setComments((prev) => [data.comment, ...prev]); 
+                toast.success(message);
+            }
+        } catch (error) {
+            console.log(error ||"Something went wrong");
+            
+        }
+        }
+
+        const getComments = async()=>{
+        try {
+            const {data,message,success} = await instance.get(`/blogs/get-comments/${params.id}`);
+            if(success){
+              
+                setComments(data?.comments);
+            }
+        } catch (error) {
+            console.log(error.message|| "Something went wrong.");
+            
+        }
+        }
+
    
 
 
     useEffect(() => {
         getBlog();
-       
-        
-
-        // Simulated comments
-        const commentsData = [
-            {
-                id: 1,
-                author: "Sarah Miller",
-                authorImage: "https://res.cloudinary.com/dgcqtwfbj/image/upload/v1756797851/portrait-787522_1280_p6fluq.jpg",
-                content: "This is a great article! The insights about user research are particularly valuable.",
-                date: "2 hours ago"
-            },
-            {
-                id: 2,
-                author: "James Wilson",
-                authorImage: "https://res.cloudinary.com/dgcqtwfbj/image/upload/v1756797987/butterfly-9791233_1280_ys6yeg.jpg",
-                content: "I appreciate how you broke down the design process. Very insightful!",
-                date: "5 hours ago"
-            }
-        ];
-        setComments(commentsData);
+        getComments();
+    
     }, [id]);
 
     
@@ -140,13 +162,20 @@ const Detail = () => {
                         <h2 className="text-2xl font-semibold mb-8">Comments ({comments.length})</h2>
                         
                         {/* Comment Form */}
-                        <form  className="mb-12">
+                        <form  onSubmit={handleSubmit(addComment)} className="mb-12">
                             <textarea
-                                 value={commentText}
-            onChange={(e) => setCommentText(e.target.value)}
+                            {
+                                ...register("comment",{
+                                    required:"The comment field is required."
+                                })
+                            }
+                               
                                 placeholder="Add a comment..."
                                 className="w-full p-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-color focus:border-primary-color resize-none h-32"
                             />
+                            {
+                                errors?.comment && <p className="text-red-500">{errors?.comment?.message}</p>
+                            }
                             <div className="mt-4 flex justify-end">
                                 <button
                                     type="submit"
@@ -160,24 +189,25 @@ const Detail = () => {
 
                         {/* Comments List */}
                         <div className="space-y-8">
-                            {comments.map((comment) => (
-                                <div key={comment.id} className="flex space-x-4">
-                                    <img 
+                            {comments && comments.map((comment) => (
+                                <div key={comment._id} className="flex space-x-4">
+                                    {/* <img 
                                         src={comment.authorImage}
                                         alt={comment.author}
                                         className="w-10 h-10 rounded-full object-cover"
-                                    />
+                                    /> */}
                                     <div>
                                         <div className="flex items-center space-x-2 mb-1">
                                             <h4 className="font-medium text-gray-900">
-                                                {comment.author}
+                                                {comment?.user?.name}
                                             </h4>
                                             <span className="text-sm text-gray-500">
-                                                {comment.date}
+                                                {moment(comment.createdAt).format("DD MMM YYYY")}
                                             </span>
                                         </div>
                                         <p className="text-gray-600">
-                                            {comment.content}
+                                            {comment.comment
+                                            }
                                         </p>
                                     </div>
                                 </div>
