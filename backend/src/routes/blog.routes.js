@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import { createBlog, deleteBlog, getBlogs, getFeaturedBlogs, getSingleBlog, getUserBlogs, updateBlog } from '../controllers/blog.controller.js'
+import { addComment, createBlog, deleteBlog, getBlogs, getComments, getFeaturedBlogs, getSingleBlog, getUserBlogs, updateBlog } from '../controllers/blog.controller.js'
 import { verifyJWT } from '../middlewares/jwt.middleware.js'
 import { upload } from '../middlewares/multer.middleware.js'
 
@@ -14,5 +14,7 @@ router.route('/:id/delete').delete(verifyJWT,deleteBlog)
 router.route('/:id/get-blog').get(verifyJWT,getSingleBlog)
 router.route('/:id/get-blog-front').get(getSingleBlog)
 router.route('/get-featured-blogs').get(getFeaturedBlogs)
+router.route('/add-comment').post(verifyJWT,addComment)
+router.route('/get-comments/:blogId').get(getComments)
 
 export default router

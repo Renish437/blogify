@@ -1,5 +1,6 @@
 import { uploadCloudinary } from "../helpers/cloudinary.js";
 import Blog from "../models/blog.models.js";
+import Comment from "../models/comment.models.js";
 
 const createBlog = async (req, res) => {
   try {
@@ -159,7 +160,10 @@ const getUserBlogs = async (req, res) => {
 };
 const getSingleBlog = async (req, res) => {
   try {
-    const blog = await Blog.findById(req.params.id).populate('user','-password');
+    const blog = await Blog.findById(req.params.id).populate(
+      "user",
+      "-password"
+    );
     res.status(200).json({
       success: true,
       data: { blog },
@@ -213,7 +217,7 @@ const deleteBlog = async (req, res) => {
 };
 const getFeaturedBlogs = async (req, res) => {
   try {
-      const {  limit} = req.query;
+    const { limit } = req.query;
     let filter = {
       status: "active",
       is_featured: "yes",
@@ -221,7 +225,8 @@ const getFeaturedBlogs = async (req, res) => {
 
     const blogs = await Blog.find(filter)
       .populate("user", "-password") // populate user info except password
-      .sort({ createdAt: -1 }).limit(limit); // newest first
+      .sort({ createdAt: -1 })
+      .limit(limit); // newest first
 
     res.status(200).json({
       success: true,
@@ -232,13 +237,80 @@ const getFeaturedBlogs = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      status: false,
+      success: false,
       message: error.message,
       data: {},
     });
   }
 };
 
+const addComment = async (req, res) => {
+  try {
+    const { id, comment } = req.body;
+  const userId = req.user?._id;
+  if (comment.trim() === "") {
+    res.status(422).json({
+      success: false,
+      message: "Comment field is required",
+      data: {},
+    });
+  }
+  if (!id) {
+    res.status(422).json({
+      success: false,
+      message: "Blog id field is required",
+      data: {},
+    });
+  }
+  const newComment = await Comment.create({
+    comment: comment,
+    user: userId,
+    blog: id,
+  });
+
+  const latestComment = await Comment.findById(newComment._id).populate(
+    "user",
+    "-password"
+  );
+  res.status(200).json({
+    success: true,
+    message: "Comment added successfully",
+    data: {
+      comment: latestComment,
+    },
+  });
+  } catch (error) {
+     res.status(500).json({
+      success: false,
+      message: error.message,
+      data: {},
+    });
+  }
+};
+
+const getComments = async (req, res) => {
+  try {
+    const { blogId } = req.params;
+
+    const comments = await Comment.find({ blog: blogId })
+      .populate("user", "-password")
+      .sort({ createdAt: -1 }); // newest first
+
+    res.status(200).json({
+      success: true,
+      message: "",
+      data: {
+        comments,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      data: {},
+    });
+  }
+};
 
 
 export {
@@ -249,4 +321,6 @@ export {
   getSingleBlog,
   getFeaturedBlogs,
   deleteBlog,
+  addComment,
+  getComments 
 };
