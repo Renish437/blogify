@@ -247,40 +247,40 @@ const getFeaturedBlogs = async (req, res) => {
 const addComment = async (req, res) => {
   try {
     const { id, comment } = req.body;
-  const userId = req.user?._id;
-  if (comment.trim() === "") {
-    res.status(422).json({
-      success: false,
-      message: "Comment field is required",
-      data: {},
+    const userId = req.user?._id;
+    if (comment.trim() === "") {
+      res.status(422).json({
+        success: false,
+        message: "Comment field is required",
+        data: {},
+      });
+    }
+    if (!id) {
+      res.status(422).json({
+        success: false,
+        message: "Blog id field is required",
+        data: {},
+      });
+    }
+    const newComment = await Comment.create({
+      comment: comment,
+      user: userId,
+      blog: id,
     });
-  }
-  if (!id) {
-    res.status(422).json({
-      success: false,
-      message: "Blog id field is required",
-      data: {},
-    });
-  }
-  const newComment = await Comment.create({
-    comment: comment,
-    user: userId,
-    blog: id,
-  });
 
-  const latestComment = await Comment.findById(newComment._id).populate(
-    "user",
-    "-password"
-  );
-  res.status(200).json({
-    success: true,
-    message: "Comment added successfully",
-    data: {
-      comment: latestComment,
-    },
-  });
+    const latestComment = await Comment.findById(newComment._id).populate(
+      "user",
+      "-password"
+    );
+    res.status(200).json({
+      success: true,
+      message: "Comment added successfully",
+      data: {
+        comment: latestComment,
+      },
+    });
   } catch (error) {
-     res.status(500).json({
+    res.status(500).json({
       success: false,
       message: error.message,
       data: {},
@@ -322,5 +322,6 @@ export {
   getFeaturedBlogs,
   deleteBlog,
   addComment,
-  getComments 
+  getComments,
+ 
 };
