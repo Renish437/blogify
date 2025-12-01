@@ -1,6 +1,8 @@
 import { uploadCloudinary } from "../helpers/cloudinary.js";
 import Blog from "../models/blog.models.js";
+import User from "../models/user.models.js";
 import Comment from "../models/comment.models.js";
+import Favorite from "../models/favourite.model.js";
 
 const createBlog = async (req, res) => {
   try {
@@ -116,7 +118,7 @@ const getBlogs = async (req, res) => {
       .sort({ createdAt: -1 })
       .limit(limit ? parseInt(limit) : 0);
 
-    res.status(200).json({
+     return res.status(200).json({
       success: true,
       message: "",
       data: {
@@ -124,7 +126,7 @@ const getBlogs = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: error.message,
       data: {},
@@ -143,7 +145,7 @@ const getUserBlogs = async (req, res) => {
     //     filter.category= category
     // }
     const blogs = await Blog.find({ user: userId }).sort({ createdAt: -1 });
-    res.status(200).json({
+     return res.status(200).json({
       success: true,
       message: "",
       data: {
@@ -151,28 +153,51 @@ const getUserBlogs = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({
+     return res.status(500).json({
       success: false,
       message: error.message,
       data: {},
     });
   }
 };
+
+
 const getSingleBlog = async (req, res) => {
   try {
-    const blog = await Blog.findById(req.params.id).populate(
+    const blogId = req.params?.id
+    const blog = await Blog.findById(blogId).populate(
       "user",
       "-password"
     );
-    res.status(200).json({
+    if(!blog){
+        return res.status(404).json({
+      success: false,
+      data: {},
+      message: "Blog not found",
+    });
+    }
+    
+    let isFavorite = false
+    if(req?.user?._id){
+     const fav = await Favorite.findOne({
+        user:req?.user?._id,
+        blog:blogId
+      })
+      if(fav) isFavorite=true
+    }
+     return res.status(200).json({
       success: true,
-      data: { blog },
+      data: { 
+        blog,
+        isFavorite 
+      },
       message: "",
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message, data: {} });
+     return res.status(500).json({ success: false, message: error.message, data: {} });
   }
-};
+}; 
+
 
 const deleteBlog = async (req, res) => {
   try {
@@ -228,7 +253,7 @@ const getFeaturedBlogs = async (req, res) => {
       .sort({ createdAt: -1 })
       .limit(limit); // newest first
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "",
       data: {
@@ -236,7 +261,7 @@ const getFeaturedBlogs = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({
+    return  res.status(500).json({
       success: false,
       message: error.message,
       data: {},
@@ -249,14 +274,14 @@ const addComment = async (req, res) => {
     const { id, comment } = req.body;
     const userId = req.user?._id;
     if (comment.trim() === "") {
-      res.status(422).json({
+       return res.status(422).json({
         success: false,
         message: "Comment field is required",
         data: {},
       });
     }
     if (!id) {
-      res.status(422).json({
+     return res.status(422).json({
         success: false,
         message: "Blog id field is required",
         data: {},
@@ -272,7 +297,7 @@ const addComment = async (req, res) => {
       "user",
       "-password"
     );
-    res.status(200).json({
+   return res.status(200).json({
       success: true,
       message: "Comment added successfully",
       data: {
@@ -280,7 +305,7 @@ const addComment = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({
+   return res.status(500).json({
       success: false,
       message: error.message,
       data: {},
@@ -296,7 +321,7 @@ const getComments = async (req, res) => {
       .populate("user", "-password")
       .sort({ createdAt: -1 }); // newest first
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "",
       data: {
@@ -304,13 +329,116 @@ const getComments = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: error.message,
       data: {},
     });
   }
 };
+const addToFavorite = async (req, res) => {
+  try {
+   
+   const {blogId} =req.body
+   const userId =req?.user?._id
+   const blog = await Blog.findById(blogId)
+   if(!blog){
+     return res.status(404).json({
+      success: false,
+      message: "Blog not found!",
+      data: {},
+    });
+   }
+    const user= await User.findById(userId)
+      if(!user){
+     return res.status(404).json({
+      success: false,
+      message: "User not found!",
+      data: {},
+    });
+   }
+
+   const favorite = await Favorite.findOne({
+    user:userId,
+    blog:blogId
+   })
+   
+   let message = ""
+   let isFavorite = true
+   if(!favorite){
+    await Favorite.create({
+      blog:blogId,
+      user:userId
+    })
+    message = "Blog added to favorite list."
+    isFavorite =true
+   }else{
+    await Favorite.deleteOne({
+      blog:blogId,
+      user:userId
+    })
+
+      message = "Blog removed from favorite list."
+      isFavorite =false
+   }
+
+    return res.status(200).json({
+      success: true,
+      message: message,
+      data: {
+        isFavorite
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+      data: {},
+    });
+  }
+};
+const getFavorites = async (req, res) => {
+  try {
+   
+ 
+   const userId =req?.user?._id
+  
+    const user= await User.findById(userId)
+      if(!user){
+     return res.status(404).json({
+      success: false,
+      message: "User not found!",
+      data: {},
+    });
+   }
+
+   const favorites = await Favorite.find({
+    user:userId,
+  
+   }).populate({
+    path:"blog",
+    populate:{
+      path:"user",
+      select:"name"
+    }
+   })
+   
+  return res.status(200).json({
+      success: true,
+      message:"",
+      data: {
+        favorites
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+      data: {},
+    });
+  }
+};
+
 
 
 export {
@@ -323,5 +451,6 @@ export {
   deleteBlog,
   addComment,
   getComments,
- 
-};
+  addToFavorite,
+  getFavorites
+ };
