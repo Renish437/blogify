@@ -26,18 +26,20 @@ const Detail = () => {
         reset
       } = useForm();
 
-      const getBlog = async ()=>{
-        try {
-            const {data,message,success} = await instance.get(`/blogs/${params.id}/get-blog-front`);
-            if(success){
-              
-                setBlog(data?.blog);
-            }
-        } catch (error) {
-            console.log(error.message|| "Something went wrong.");
-            
-        }
-      }
+  const getBlog = async () => {
+  try {
+    const { success, data } = await instance.get(
+      `/blogs/${params.id}/get-blog-front`
+    );
+
+    if (success) {
+      setBlog(data.blog);
+      setIsFavorite(data.isFavorite); // ✅ IMPORTANT FIX
+    }
+  } catch (error) {
+    console.log(error.message || "Something went wrong.");
+  }
+};
 
       const addComment = async (formData)=>{
 
@@ -80,8 +82,23 @@ const Detail = () => {
 
     
 
-    const toggleFavorite = () => {
-        setIsFavorite(!isFavorite);
+    const toggleFavorite = async () => {
+        try{
+          const {data,message,success }=  await instance.post(`/blogs/add-to-favorite`,{blogId:params.id})
+
+          if(success){
+            toast.success(message)
+              setIsFavorite(data.isFavorite);
+          }else{
+              setIsFavorite(!data.isFavorite); 
+          }
+       
+
+        }catch(error){
+         console.log(error || "Something went wrong");
+       
+        }
+      
     };
 
     if (!blog) return null;
