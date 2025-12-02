@@ -13,46 +13,33 @@ const ChangePassword = () => {
     register,
     handleSubmit,
     setError,
+    watch,
     formState: { errors },
     reset,
   } = useForm();
 
-  const onSubmit = async (data) => {
-    // Local confirm password validation
-    if (data.newPassword !== data.confirmPassword) {
-      setError("confirmPassword", {
-        type: "manual",
-        message: "New password and confirm password do not match",
-      });
-      return;
+const updatePassword = async (formData) => {
+  setLoading(true);
+  try {
+    const { message, data, success } = await instance.put("/users/update-password", formData);
+    if (success) {
+      reset();
+      toast.success(message);
     }
-
-    setLoading(true);
- try {
-  const res = await instance.put("/users/update-password", {
-    currentPassword: data.currentPassword,
-    newPassword: data.newPassword,
-  });
-
-  // Successful response (2xx)
-  if (res.data.success) {
-    toast.success(res.data.message);
-    reset();
+  } catch (error) {
+    // Safe access using optional chaining
+    const errorMessage =
+      error?.response?.data?.message || // backend message
+      error?.message ||                // fallback axios message
+      "Something went wrong";          // final fallback
+    toast.error(errorMessage);
+  } finally {
+    setLoading(false);
   }
-} catch (error) {
-  // Axios error response
-  const msg = error?.response?.data?.message || "Failed to update password!";
-  toast.error(msg);
+};
 
-  // If backend says current password is incorrect, show under field
-  if (msg === "Current password is incorrect") {
-    setError("currentPassword", { type: "manual", message: msg });
-  }
-}
- finally {
-      setLoading(false);
-    }
-  };
+
+  const newPassword = watch("newPassword")
 
   return (
     <Layout>
@@ -69,7 +56,7 @@ const ChangePassword = () => {
 
                   <form
                     className="space-y-4 max-w-full"
-                    onSubmit={handleSubmit(onSubmit)}
+                    onSubmit={handleSubmit(updatePassword)}
                   >
                     {/* Current Password */}
                     <div>
@@ -90,7 +77,7 @@ const ChangePassword = () => {
                       />
                       {errors.currentPassword && (
                         <p className="text-red-500 text-sm mt-1">
-                          {errors.currentPassword.message}
+                          {errors.currentPassword?.message}
                         </p>
                       )}
                     </div>
@@ -118,7 +105,7 @@ const ChangePassword = () => {
                       />
                       {errors.newPassword && (
                         <p className="text-red-500 text-sm mt-1">
-                          {errors.newPassword.message}
+                          {errors.newPassword?.message}
                         </p>
                       )}
                       <p className="mt-1 text-xs text-gray-500">
@@ -139,13 +126,16 @@ const ChangePassword = () => {
                         type="password"
                         {...register("confirmPassword", {
                           required: "Confirm password is required",
+                          validate:(value)=>{
+                          return newPassword === value || "The Password fields don't match"
+                          }
                         })}
                         className="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-md text-sm shadow-sm placeholder-gray-400 focus:outline-none focus:border-primary-color focus:ring-1 focus:ring-primary-color"
                         placeholder="Confirm your new password"
                       />
                       {errors.confirmPassword && (
                         <p className="text-red-500 text-sm mt-1">
-                          {errors.confirmPassword.message}
+                          {errors.confirmPassword?.message}
                         </p>
                       )}
                     </div>

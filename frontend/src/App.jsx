@@ -14,6 +14,7 @@ import RequireAuth from "./components/common/RequireAuth";
 import GuestRoute from "./components/common/GuestRoute";
 import CreateBlog from "./components/blog/CreateBlog";
 import UpdateBlog from "./components/blog/UpdateBlog";
+import ChangePassword from "./components/account/ChangePasword";
 // import { Toaster } from 'react-hot-toast';
 
 const App = () => {
@@ -57,7 +58,7 @@ const App = () => {
                  } />
                 <Route path="/change-password" element={
                     <RequireAuth>
-                        <ChangePasword />
+                        <ChangePassword />
                     </RequireAuth>
                  } />
                 <Route path="/saved-blogs" element={
