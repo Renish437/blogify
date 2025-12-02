@@ -192,8 +192,8 @@ const updatePassword = async (req, res) => {
     const { currentPassword, newPassword } = req.body;
 
     // 1. Validate input
-    if (!currentPassword || !newPassword) {
-      return res.status(422).json({
+    if ([newPassword,currentPassword].some(field=>field=="")) {
+      return res.status(400).json({
         success: false,
         message: "Both current and new password are required",
         data: {},
@@ -213,7 +213,7 @@ const updatePassword = async (req, res) => {
     // 3. Check if current password is correct
     const isMatched = await user.isPasswordMatched(currentPassword);
     if (!isMatched) {
-      return res.status(422).json({
+      return res.status(400).json({
         success: false,
         message: "Current password is incorrect",
         data: {},
@@ -222,7 +222,7 @@ const updatePassword = async (req, res) => {
 
     // 4. Update password (pre-save hook hashes automatically)
     user.password = newPassword;
-    await user.save();
+    user.save();
 
     // 5. Success response
     return res.status(200).json({
