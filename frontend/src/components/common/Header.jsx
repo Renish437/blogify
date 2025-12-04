@@ -55,9 +55,10 @@ const Header = () => {
 
           <nav className="hidden md:flex space-x-6">
             {
-              categories && categories.map(category=>{
+              categories && categories.map((category,index)=>{
                 return (
                 <NavLink
+                key={index}
               to={`/blogs?category=${category.name.toLowerCase()}`}
               className="text-gray-900 hover:text-gray-600  md:text-lg"
             >
@@ -89,7 +90,7 @@ const Header = () => {
           {isLoginIn && (
             <Link
               to="/profile"
-              className="px-4 py-2 md:text-lg bg-primary-color  text-white rounded-md transition"
+              className="px-4 py-2 md:text-lg hidden md:block bg-primary-color  text-white rounded-md transition"
             >
               Dashboard
             </Link>
@@ -170,49 +171,22 @@ const Header = () => {
             </button>
           </div>
           <nav className="space-y-4">
-            <NavLink
-              to="/blogs"
-              className="block text-gray-900 hover:text-gray-600 py-2"
-              onClick={toggleMobileMenu}
+           {
+              categories && categories.map((category,index)=>{
+                return (
+                <NavLink
+                key={index}
+              to={`/blogs?category=${category.name.toLowerCase()}`}
+              className="block text-gray-500 hover:text-gray-600 py-2"
             >
-              Fashion
+             { category.name}
             </NavLink>
-            <NavLink
-              to="/blogs"
-              className="block text-gray-900 hover:text-gray-600 py-2"
-              onClick={toggleMobileMenu}
-            >
-              Travel
-            </NavLink>
-            <NavLink
-              to="/blogs"
-              className="block text-gray-900 hover:text-gray-600 py-2"
-              onClick={toggleMobileMenu}
-            >
-              Education
-            </NavLink>
-            <NavLink
-              to="/blogs"
-              className="block text-gray-900 hover:text-gray-600 py-2"
-              onClick={toggleMobileMenu}
-            >
-              Technology
-            </NavLink>
-            <NavLink
-              to="/blogs"
-              className="block text-gray-900 hover:text-gray-600 py-2"
-              onClick={toggleMobileMenu}
-            >
-              Business
-            </NavLink>
-            <NavLink
-              to="/blogs"
-              className="block text-gray-900 hover:text-gray-600 py-2"
-              onClick={toggleMobileMenu}
-            >
-              Entertainment
-            </NavLink>
+                )
+              })
+            }
           </nav>
+              {!isLoginIn && (
+
           <div className="mt-8 space-y-4">
             <Link
               to="/login"
@@ -230,6 +204,18 @@ const Header = () => {
               Register
             </Link>
           </div>
+              )}
+
+                {isLoginIn && (
+                   <div className="mt-8 space-y-4">
+            <Link
+              to="/profile"
+        className="block w-full px-4 py-2 text-center bg-primary-color hover:bg-secondary-color text-white rounded-md transition"
+            >
+              Dashboard
+            </Link>
+            </div>
+          )}
         </div>
       </div>
     </>

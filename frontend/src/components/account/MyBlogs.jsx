@@ -80,6 +80,7 @@ const MyBlogs = () => {
     blogs.map((blog) => (
       <article key={blog._id} className="group cursor-pointer">
         <div className="relative aspect-[16/10] overflow-hidden rounded-xl mb-4">
+          <Link to={`/detail/${blog._id}`}>
           {blog.image ? (
             <img
               src={blog.image}
@@ -93,6 +94,7 @@ const MyBlogs = () => {
               className="w-full h-full object-cover"
             />
           )}
+          </Link>
 
           {blog.status === "active" && (
             <span className="absolute top-4 right-4 px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">
@@ -112,15 +114,15 @@ const MyBlogs = () => {
           <span>{blog.read_time} min read</span>
         </div>
 
+  <Link to={`/detail/${blog._id}`}>
         <h3 className="text-lg font-semibold text-gray-900 mb-3">
           {blog.title}
         </h3>
+  </Link>
 
-        <p className="text-gray-600 mb-4 line-clamp-2">
-          It begins to notice that there was a sharp contrast between
-          well-made designs and how they impacted the overall user
-          experience...
-        </p>
+    <p className="text-gray-600 mb-4 line-clamp-2"
+   dangerouslySetInnerHTML={{ __html: blog.content || "" }}>
+</p>
 
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">

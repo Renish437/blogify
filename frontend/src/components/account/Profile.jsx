@@ -230,7 +230,7 @@ const Profile = () => {
                 </div>
 
                 {/* Stats */}
-                <div className="bg-white shadow rounded-lg p-6">
+                {/* <div className="bg-white shadow rounded-lg p-6">
                   <h3 className="text-lg font-medium text-gray-900 mb-4">
                     Account Statistics
                   </h3>
@@ -254,7 +254,7 @@ const Profile = () => {
                       </p>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </main>
           </div>
